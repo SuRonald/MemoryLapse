@@ -10,7 +10,7 @@ import GameplayKit
 
 class StageScene: SKScene {
     
-    var gameViewController: GameViewController!
+    var gameViewController: GameViewController! = GameData.gameViewController
     var stageMap: SKSpriteNode!
     var startButtonNode: SKSpriteNode!
     var backButtonNode: SKSpriteNode!
@@ -71,9 +71,11 @@ class StageScene: SKScene {
             if let name = touchNode.name {
                 if name == "StartButton" {
 //                    GameData.stageCleared += 1
+                    GameData.backgroundMusicPlayer.pause()
                     gameViewController.performSegue(withIdentifier: "toARView", sender: self)
                 }
                 else if name == "BackButton" {
+                    GameData.backgroundMusicPlayer.play()
                     toGameScene()
                 }
             }

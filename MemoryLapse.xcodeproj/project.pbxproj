@@ -21,6 +21,8 @@
 		D6C0D80529D081AC00477978 /* ARViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C0D80429D081AC00477978 /* ARViewController.swift */; };
 		D6C0D80729D081BE00477978 /* StageScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6C0D80629D081BE00477978 /* StageScene.sks */; };
 		D6C0D80929D081DE00477978 /* ARScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6C0D80829D081DE00477978 /* ARScene.sks */; };
+		D6C0D80C29D0875200477978 /* Closers-GangnamBGM.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D6C0D80A29D0875200477978 /* Closers-GangnamBGM.mp3 */; };
+		D6C0D80D29D0875200477978 /* RunningInGrass-VolumeUp.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D6C0D80B29D0875200477978 /* RunningInGrass-VolumeUp.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +41,8 @@
 		D6C0D80429D081AC00477978 /* ARViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewController.swift; sourceTree = "<group>"; };
 		D6C0D80629D081BE00477978 /* StageScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = StageScene.sks; sourceTree = "<group>"; };
 		D6C0D80829D081DE00477978 /* ARScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = ARScene.sks; sourceTree = "<group>"; };
+		D6C0D80A29D0875200477978 /* Closers-GangnamBGM.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Closers-GangnamBGM.mp3"; sourceTree = "<group>"; };
+		D6C0D80B29D0875200477978 /* RunningInGrass-VolumeUp.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "RunningInGrass-VolumeUp.mp3"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,9 +88,19 @@
 				D6C0D80229D0818D00477978 /* ARScene.swift */,
 				D6C0D7F129D07F8600477978 /* Main.storyboard */,
 				D6C0D7F429D07F8700477978 /* Assets.xcassets */,
+				D6C0D80E29D0875700477978 /* SoundAsset */,
 				D6C0D7F629D07F8700477978 /* LaunchScreen.storyboard */,
 			);
 			path = MemoryLapse;
+			sourceTree = "<group>";
+		};
+		D6C0D80E29D0875700477978 /* SoundAsset */ = {
+			isa = PBXGroup;
+			children = (
+				D6C0D80A29D0875200477978 /* Closers-GangnamBGM.mp3 */,
+				D6C0D80B29D0875200477978 /* RunningInGrass-VolumeUp.mp3 */,
+			);
+			path = SoundAsset;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -150,7 +164,9 @@
 				D6C0D7F329D07F8600477978 /* Main.storyboard in Resources */,
 				D6C0D7EA29D07F8600477978 /* GameScene.sks in Resources */,
 				D6C0D7F529D07F8700477978 /* Assets.xcassets in Resources */,
+				D6C0D80C29D0875200477978 /* Closers-GangnamBGM.mp3 in Resources */,
 				D6C0D80929D081DE00477978 /* ARScene.sks in Resources */,
+				D6C0D80D29D0875200477978 /* RunningInGrass-VolumeUp.mp3 in Resources */,
 				D6C0D80729D081BE00477978 /* StageScene.sks in Resources */,
 				D6C0D7F829D07F8700477978 /* LaunchScreen.storyboard in Resources */,
 				D6C0D7EC29D07F8600477978 /* Actions.sks in Resources */,

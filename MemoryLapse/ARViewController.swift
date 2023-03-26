@@ -78,4 +78,3 @@ class ARViewController: UIViewController, ARSKViewDelegate {
     }
 
 }
-

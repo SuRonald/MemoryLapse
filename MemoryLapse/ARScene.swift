@@ -39,6 +39,7 @@ class ARScene: SKScene {
             
             if let name = touchNode.name {
                 if name == "BackButton" {
+                    GameData.backgroundMusicPlayer.play()
                     GameData.stageCleared += 1
                     arViewController.dismiss(animated: true)
                 }

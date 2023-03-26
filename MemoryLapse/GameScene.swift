@@ -10,7 +10,7 @@ import GameplayKit
 
 class GameScene: SKScene {
     
-    var gameViewController: GameViewController!
+    var gameViewController: GameViewController! = GameData.gameViewController
     var gameMap: SKSpriteNode!
     var pathNodes: [SKSpriteNode]! = []
     var pathPositions: [CGPoint]! = [CGPoint(x: -19, y: -42), CGPoint(x: 55, y: -102), CGPoint(x: -13, y: -136), CGPoint(x: 64, y: -208), CGPoint(x: -18, y: -310)]
@@ -36,8 +36,6 @@ class GameScene: SKScene {
         gameMap.size = self.view!.frame.size
         gameMap.zPosition = 1
         addChild(gameMap)
-        
-//        run(SKAction.playSoundFileNamed("Closers-GangnamBGM", waitForCompletion: false))
         
         for i in 1...5 {
             pathNodes.append(SKSpriteNode(imageNamed: "Path/\(i)"))
@@ -123,9 +121,10 @@ class GameScene: SKScene {
         let newPlayerWHSize = standardSize * newPlayerRatio
         changeGameData(currentPath, newPlayerPosition, newPlayerRatio)
         
+        run(SKAction.playSoundFileNamed("RunningInGrass-VolumeUp", waitForCompletion: false))
         player.run(SKAction.repeatForever(playerMovement))
-        player.run(SKAction.scale(to: CGSize(width: newPlayerWHSize, height: newPlayerWHSize), duration: 1.5))
-        player.run(SKAction.move(to: newPlayerPosition, duration: 1.5), completion: {
+        player.run(SKAction.scale(to: CGSize(width: newPlayerWHSize, height: newPlayerWHSize), duration: 1.8))
+        player.run(SKAction.move(to: newPlayerPosition, duration: 1.8), completion: {
             self.player.removeAllActions()
             self.checkIdlePosition(currentPath)
         })
@@ -181,7 +180,6 @@ class GameScene: SKScene {
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches { self.touchUp(atPoint: t.location(in: self)) }
     }
-    
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
