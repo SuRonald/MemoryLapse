@@ -28,18 +28,8 @@ class GameScene: SKScene {
     var standardSize: CGFloat!
     
     var endingCount: Int! = 0
-    var endingScreen: SKSpriteNode!
-    var endingTextNode: [SKLabelNode]! = []
-    var endingString: [[String]]! = [
-        ["How was it?", "Did those moments bring you back?", "Those moments are just 5 of the thousand of memories you experience in your life"]
-        , ["You got to met amazing people!", "Some become your best friends", "Some even impress you with thier personality or talent"]
-        , ["But!", "Did you know who is the most impressive?", " "]
-        , ["You", " ", "The one who have unique memories different than anyone"]
-        , ["You", " ", "The one who impress others with your life story"]
-        , ["You", " ", "The one who move forward despite the uncertainty"]
-        , [" ", "FIN", " "]
-    ]
-    var endingTextPosition: [CGPoint]! = [CGPoint(x: 0, y: 150), CGPoint(x: 0, y: 0), CGPoint(x: 0, y: -150)]
+    var endingScreens: [SKSpriteNode]! = []
+    var endingTextNodes: [SKSpriteNode]! = []
     
     override func didMove(to view: SKView) {
 //        print(self.view!.frame.size)
@@ -47,12 +37,12 @@ class GameScene: SKScene {
 //        print(GameData.stageCleared)
         standardSize = (self.frame.size.width + self.frame.size.height) * 0.05
         
-        gameMap = SKSpriteNode(imageNamed: "GameMap")
+        gameMap = SKSpriteNode(imageNamed: "GameMap/Normal")
         gameMap.size = self.view!.frame.size
         gameMap.zPosition = 1
         addChild(gameMap)
         
-        gameMapUpdated = SKSpriteNode(imageNamed: "GameMapUnlocked")
+        gameMapUpdated = SKSpriteNode(imageNamed: "GameMap/Unlocked")
         gameMapUpdated.size = self.view!.frame.size
         gameMapUpdated.zPosition = 2
         gameMapUpdated.alpha = 0
@@ -71,13 +61,27 @@ class GameScene: SKScene {
             addChild(pathNodes[i-1])
         }
         
-        endingScreen = SKSpriteNode(color: UIColor(red: 242/255, green: 205/255, blue: 164/255, alpha: 255/255), size: view.frame.size)
-        endingScreen.zPosition = 5
-        endingScreen.alpha = 0
-        endingScreen.name = "Ending"
-        endingScreen.run(SKAction.fadeIn(withDuration: 1))
         
-        endingTextNode = changeEndingText(endingCount)
+        for i in 0...1 {
+            let endingType = ["Land", "Air"]
+            endingScreens.append(SKSpriteNode())
+            endingScreens[i] = SKSpriteNode(imageNamed: "EndingScreen/\(endingType[i])")
+            endingScreens[i].size = self.view!.frame.size
+            endingScreens[i].zPosition = 5 + CGFloat(i)
+            endingScreens[i].alpha = 0
+            endingScreens[i].name = "Ending"
+            endingScreens[i].run(SKAction.fadeIn(withDuration: 1))
+        }
+        
+        for i in 0...6 {
+            endingTextNodes.append(SKSpriteNode())
+            endingTextNodes[i] = SKSpriteNode(imageNamed: "EndingText/\(i)")
+            endingTextNodes[i].size = self.view!.frame.size
+            endingTextNodes[i].zPosition = 7
+            endingTextNodes[i].alpha = 0
+            endingTextNodes[i].name = "Ending"
+            endingTextNodes[i].run(SKAction.fadeIn(withDuration: 1))
+        }
         
         enterButton = SKSpriteNode(imageNamed: "ButtonUI/Enter")
         enterButton.size = CGSize(width: standardSize * 1.5, height: standardSize * 1.5)
@@ -130,33 +134,30 @@ class GameScene: SKScene {
                 if name == "Ending" {
                     switch endingCount! {
                     case 0...5:
-                        for i in 0...2 {
-                            endingTextNode[i].run(SKAction.sequence([SKAction.fadeOut(withDuration: 1), SKAction.removeFromParent()]))
+                        if endingCount == 5 {
+                            addChild(endingScreens[1])
+                            run(SKAction.wait(forDuration: 1), completion: {
+                                self.endingScreens[0].run(SKAction.removeFromParent())
+                            })
                         }
+                        endingTextNodes[endingCount].run(SKAction.sequence([SKAction.fadeOut(withDuration: 1), SKAction.removeFromParent()]))
                         endingCount += 1
-                        endingTextNode = changeEndingText(endingCount)
                         run(SKAction.wait(forDuration: 1), completion: {
-                            self.addChild(self.endingTextNode[0])
-                            self.addChild(self.endingTextNode[1])
-                            self.addChild(self.endingTextNode[2])
+                            self.addChild(self.endingTextNodes[self.endingCount])
                         })
                     default:
                         resetGameData()
                         gameMapUpdated.removeFromParent()
-                        endingScreen.run(SKAction.sequence([SKAction.fadeOut(withDuration: 1), SKAction.removeFromParent()]))
-                        for i in 0...2 {
-                            endingTextNode[i].run(SKAction.sequence([SKAction.fadeOut(withDuration: 1), SKAction.removeFromParent()]))
-                        }
+                        endingTextNodes[6].run(SKAction.sequence([SKAction.fadeOut(withDuration: 1), SKAction.removeFromParent()]))
+                        endingScreens[1].run(SKAction.sequence([SKAction.fadeOut(withDuration: 1), SKAction.removeFromParent()]))
                     }
                 }
                 else if name == "Path6" && GameData.currentPath == 5 && GameData.stageCleared >= 5 {
 //                else if name == "Path6" {
                     playerMovement(6, CGPoint(x: 90, y: 97), 1.2, moveToRight)
-                    addChild(endingScreen)
+                    addChild(endingScreens[0])
                     run(SKAction.wait(forDuration: 1), completion: {
-                        self.addChild(self.endingTextNode[0])
-                        self.addChild(self.endingTextNode[1])
-                        self.addChild(self.endingTextNode[2])
+                        self.addChild(self.endingTextNodes[0])
                     })
                 }
                 else if name == "Path5" && GameData.currentPath == 4 && GameData.stageCleared >= 4 {
@@ -224,40 +225,8 @@ class GameScene: SKScene {
         GameData.isWalking = true
     }
     
-    func changeEndingText(_ section: Int) -> [SKLabelNode] {
-        var newEndingTextNode: [SKLabelNode]! = []
-        
-        for j in 0...2 {
-            let customStringStyle = NSMutableParagraphStyle()
-            customStringStyle.alignment = .center
-            let range = NSRange(location: 0, length: endingString[section][j].count)
-            let endingText = NSMutableAttributedString(string: endingString[section][j])
-            endingText.addAttribute(NSAttributedString.Key.paragraphStyle, value: customStringStyle, range: range)
-            
-            if section == 6 {
-                endingText.addAttribute(NSAttributedString.Key.font, value: UIFont.systemFont(ofSize: 100, weight: .bold), range: range)
-            }
-            else if j == 0 {
-                endingText.addAttribute(NSAttributedString.Key.font, value: UIFont.systemFont(ofSize: 40, weight: .medium), range: range)
-            }
-            else {
-                endingText.addAttribute(NSAttributedString.Key.font, value: UIFont.systemFont(ofSize: 30), range: range)
-            }
-            
-            newEndingTextNode.append(SKLabelNode())
-            newEndingTextNode[j].attributedText = endingText
-            newEndingTextNode[j].preferredMaxLayoutWidth = self.view!.frame.width - 40
-            newEndingTextNode[j].numberOfLines = 4
-            newEndingTextNode[j].position = endingTextPosition[j]
-            newEndingTextNode[j].zPosition = 5
-            newEndingTextNode[j].alpha = 0
-            newEndingTextNode[j].run(SKAction.fadeIn(withDuration: 2))
-        }
-        
-        return newEndingTextNode
-    }
-    
     func resetGameData() -> Void {
+        
         GameData.stageCleared = 0
         GameData.currentPath = 1
         GameData.playerPosition = CGPoint(x: -18, y: -250)
@@ -269,6 +238,7 @@ class GameScene: SKScene {
     }
     
     func touchDown(atPoint pos : CGPoint) {
+        
         print(pos)
     }
     
