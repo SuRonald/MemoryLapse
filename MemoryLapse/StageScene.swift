@@ -15,7 +15,7 @@ class StageScene: SKScene {
     var startButtonNode: SKSpriteNode!
     var backButtonNode: SKSpriteNode!
     var playerNode: SKSpriteNode!
-    var playerStagePosition: [String: CGPoint]! = ["Path5": CGPoint(x: 50, y: -130), "Path4": CGPoint(x: -65, y: -140), "Path3": CGPoint(x: 40, y: -140), "Path2": CGPoint(x: 75, y: -160), "Path1": CGPoint(x: 15, y: -140)]
+    var playerStagePosition: [CGPoint]! = [CGPoint(x: 50, y: -130), CGPoint(x: -65, y: -140), CGPoint(x: 40, y: -140), CGPoint(x: 75, y: -160), CGPoint(x: 15, y: -140)]
     var idleFrontTextures: [SKTexture]! = []
     var frontIdle: SKAction!
     var standardSize: CGFloat!
@@ -49,7 +49,7 @@ class StageScene: SKScene {
         playerNode = SKSpriteNode(imageNamed: "IdleFront/0")
         playerNode.size = CGSize(width: standardSize * 6, height: standardSize * 6)
         playerNode.zPosition = 2
-        playerNode.position = playerStagePosition[GameData.currentPath]!
+        playerNode.position = playerStagePosition[GameData.currentPath-1]
         playerNode.run(SKAction.repeatForever(frontIdle))
         addChild(playerNode)
         
@@ -70,9 +70,9 @@ class StageScene: SKScene {
             
             if let name = touchNode.name {
                 if name == "StartButton" {
-//                    GameData.stageCleared += 1
+                    GameData.stageCleared += 1
                     GameData.backgroundMusicPlayer.pause()
-                    gameViewController.performSegue(withIdentifier: "toARView", sender: self)
+//                    gameViewController.performSegue(withIdentifier: "toARView", sender: self)
                 }
                 else if name == "BackButton" {
                     GameData.backgroundMusicPlayer.play()

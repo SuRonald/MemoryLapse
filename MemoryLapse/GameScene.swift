@@ -13,7 +13,7 @@ class GameScene: SKScene {
     var gameViewController: GameViewController! = GameData.gameViewController
     var gameMap: SKSpriteNode!
     var pathNodes: [SKSpriteNode]! = []
-    var pathPositions: [CGPoint]! = [CGPoint(x: -19, y: -42), CGPoint(x: 55, y: -102), CGPoint(x: -13, y: -136), CGPoint(x: 64, y: -208), CGPoint(x: -18, y: -310)]
+    var pathPositions: [CGPoint]! = [CGPoint(x: -18, y: -310), CGPoint(x: 64, y: -208), CGPoint(x: -13, y: -136), CGPoint(x: 55, y: -102), CGPoint(x: -19, y: -42)]
     var player: SKSpriteNode!
     var enterButton: SKSpriteNode!
     var moveToRight: SKAction!
@@ -88,26 +88,26 @@ class GameScene: SKScene {
     }
     
     @objc func tappedView (_ sender: UITapGestureRecognizer){
-        if sender.state == .ended {
+        if sender.state == .ended && !GameData.isWalking{
             var post = sender.location(in: sender.view)
             post = self.convertPoint(fromView: post)
             let touchNode = self.atPoint(post)
             
             if let name = touchNode.name {
-                if name == "Path1" && GameData.currentPath == "Path2" && GameData.stageCleared >= 4 {
-                    playerMovement("Path1", CGPoint(x: -19, y: -15), 1.2, moveToLeft)
+                if name == "Path5" && GameData.currentPath == 4 && GameData.stageCleared >= 4 {
+                    playerMovement(5, CGPoint(x: -19, y: -15), 1.2, moveToLeft)
                 }
-                else if name == "Path2" && (GameData.currentPath == "Path3" || GameData.currentPath == "Path1") && GameData.stageCleared >= 3 {
-                    playerMovement("Path2", CGPoint(x: 55, y: -70), 1.5, moveToRight)
+                else if name == "Path4" && (GameData.currentPath == 3 || GameData.currentPath == 5) && GameData.stageCleared >= 3 {
+                    playerMovement(4, CGPoint(x: 55, y: -70), 1.5, moveToRight)
                 }
-                else if name == "Path3" && (GameData.currentPath == "Path4" || GameData.currentPath == "Path2") && GameData.stageCleared >= 2 {
-                    playerMovement("Path3", CGPoint(x: -13, y: -98), 1.7, moveToLeft)
+                else if name == "Path3" && (GameData.currentPath == 2 || GameData.currentPath == 4) && GameData.stageCleared >= 2 {
+                    playerMovement(3, CGPoint(x: -13, y: -98), 1.7, moveToLeft)
                 }
-                else if name == "Path4" && (GameData.currentPath == "Path5" || GameData.currentPath == "Path3") && GameData.stageCleared >= 1 {
-                    playerMovement("Path4", CGPoint(x: 64, y: -160), 2.1, moveToRight)
+                else if name == "Path2" && (GameData.currentPath == 1 || GameData.currentPath == 3) && GameData.stageCleared >= 1 {
+                    playerMovement(2, CGPoint(x: 64, y: -160), 2.1, moveToRight)
                 }
-                else if name == "Path5" && GameData.currentPath == "Path4" {
-                    playerMovement("Path5", CGPoint(x: -18, y: -250), 2.5, moveToLeft)
+                else if name == "Path1" && GameData.currentPath == 2 {
+                    playerMovement(1, CGPoint(x: -18, y: -250), 2.5, moveToLeft)
                 }
                 else if name == "enterButton"{
                     toStageScene()
@@ -116,7 +116,7 @@ class GameScene: SKScene {
         }
     }
     
-    func playerMovement(_ currentPath: String, _ newPlayerPosition: CGPoint, _ newPlayerRatio: CGFloat, _ playerMovement: SKAction) -> Void {
+    func playerMovement(_ currentPath: Int, _ newPlayerPosition: CGPoint, _ newPlayerRatio: CGFloat, _ playerMovement: SKAction) -> Void {
         
         let newPlayerWHSize = standardSize * newPlayerRatio
         changeGameData(currentPath, newPlayerPosition, newPlayerRatio)
@@ -127,6 +127,7 @@ class GameScene: SKScene {
         player.run(SKAction.move(to: newPlayerPosition, duration: 1.8), completion: {
             self.player.removeAllActions()
             self.checkIdlePosition(currentPath)
+            GameData.isWalking = false
         })
     }
     
@@ -138,21 +139,22 @@ class GameScene: SKScene {
         self.view!.presentScene(scene!, transition: SKTransition.fade(with: UIColor.white, duration: 1))
     }
     
-    func checkIdlePosition(_ currentPath: String) -> Void {
+    func checkIdlePosition(_ currentPath: Int) -> Void {
         
         switch GameData.currentPath {
-        case "Path5", "Path3", "Path1":
+        case 1, 3, 5:
             player.run(SKAction.repeatForever(leftIdle))
         default:
             player.run(SKAction.repeatForever(rightIdle))
         }
     }
     
-    func changeGameData(_ currentPath: String, _ newPlayerPosition: CGPoint, _ newPlayerRatio: CGFloat) -> Void {
+    func changeGameData(_ currentPath: Int, _ newPlayerPosition: CGPoint, _ newPlayerRatio: CGFloat) -> Void {
         
         GameData.playerRatio = newPlayerRatio
         GameData.currentPath = currentPath
         GameData.playerPosition = newPlayerPosition
+        GameData.isWalking = true
     }
     
     func touchDown(atPoint pos : CGPoint) {
@@ -185,4 +187,3 @@ class GameScene: SKScene {
         // Called before each frame is rendered
     }
 }
-
