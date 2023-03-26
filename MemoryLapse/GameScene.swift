@@ -56,22 +56,22 @@ class GameScene: SKScene {
         for i in 0...35 {
             rightMovementTextures.append(SKTexture(imageNamed: "MoveRight/\(i)"))
         }
-        moveToRight = SKAction.animate(with: rightMovementTextures, timePerFrame: 0.035)
+        moveToRight = SKAction.animate(with: rightMovementTextures, timePerFrame: 0.02)
         
         for i in 0...35 {
             leftMovementTextures.append(SKTexture(imageNamed: "MoveLeft/\(i)"))
         }
-        moveToLeft = SKAction.animate(with: leftMovementTextures, timePerFrame: 0.035)
+        moveToLeft = SKAction.animate(with: leftMovementTextures, timePerFrame: 0.02)
         
         for i in 0...26 {
             idleRightTextures.append(SKTexture(imageNamed: "IdleRight/\(i)"))
         }
-        rightIdle = SKAction.animate(with: idleRightTextures, timePerFrame: 0.035)
+        rightIdle = SKAction.animate(with: idleRightTextures, timePerFrame: 0.02)
         
         for i in 0...26 {
             idleLeftTextures.append(SKTexture(imageNamed: "IdleLeft/\(i)"))
         }
-        leftIdle = SKAction.animate(with: idleLeftTextures, timePerFrame: 0.035)
+        leftIdle = SKAction.animate(with: idleLeftTextures, timePerFrame: 0.02)
         
         player = SKSpriteNode(imageNamed: "IdleLeft/0")
         player.size = CGSize(width: standardSize * GameData.playerRatio, height: standardSize * GameData.playerRatio)

@@ -44,7 +44,7 @@ class StageScene: SKScene {
         for i in 0...26 {
             idleFrontTextures.append(SKTexture(imageNamed: "IdleFront/\(i)"))
         }
-        frontIdle = SKAction.animate(with: idleFrontTextures, timePerFrame: 0.035)
+        frontIdle = SKAction.animate(with: idleFrontTextures, timePerFrame: 0.02)
         
         playerNode = SKSpriteNode(imageNamed: "IdleFront/0")
         playerNode.size = CGSize(width: standardSize * 6, height: standardSize * 6)
