@@ -70,12 +70,12 @@ class StageScene: SKScene {
             
             if let name = touchNode.name {
                 if name == "StartButton" {
-                    GameData.stageCleared += 1
+//                    GameData.stageCleared += 1
                     GameData.backgroundMusicPlayer.pause()
-//                    gameViewController.performSegue(withIdentifier: "toARView", sender: self)
+                    gameViewController.performSegue(withIdentifier: "toARView", sender: self)
                 }
                 else if name == "BackButton" {
-                    GameData.backgroundMusicPlayer.play()
+//                    GameData.backgroundMusicPlayer.play()
                     toGameScene()
                 }
             }

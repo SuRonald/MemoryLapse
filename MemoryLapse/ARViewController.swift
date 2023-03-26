@@ -8,13 +8,18 @@
 import UIKit
 import ARKit
 import SpriteKit
+import Photos
 
 class ARViewController: UIViewController, ARSKViewDelegate {
+    
+    let manager = PHImageManager.default()
 
     @IBOutlet weak var sceneView: ARSKView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        GameData.momentList
         
         // Set the view's delegate
         sceneView.delegate = self
@@ -52,14 +57,63 @@ class ARViewController: UIViewController, ARSKViewDelegate {
     func view(_ view: ARSKView, nodeFor anchor: ARAnchor) -> SKNode? {
         // Create and configure a node for the anchor added to the view's session.
         print("Masuk")
-        let node = SKLabelNode(text: "🫵")
-        node.horizontalAlignmentMode = .center
-        node.verticalAlignmentMode = .center
-//        let node = SKSpriteNode(imageNamed: "river_home_art")
-//        node.size.height = CGFloat(50.0)
-//        node.size.width = CGFloat(100.0)
+        var image: UIImage!
+        
+        if GameData.currentPath <= GameData.momentCount {
+            image = loadImage(GameData.places[GameData.currentPath-1])
+        }
+        else {
+            image = loadPlaceHolder()
+        }
+        
+        let texture = SKTexture(image: image)
+        
+        let node = SKSpriteNode(texture: texture)
+        node.size.height = CGFloat(image.size.height * 0.2)
+        node.size.width = CGFloat(image.size.width * 0.2)
         
         return node;
+    }
+    
+    func loadImage(_ index: String) -> UIImage {
+        var image: UIImage!
+        let fetchResult: PHFetchResult = PHAsset.fetchAssets(in: GameData.momentList[index]![Int.random(in: 0..<GameData.momentList[index]!.count)], options: fetchOption())
+
+        print("Masuk")
+        print(fetchResult.count)
+        print("Image Metadata")
+        print(fetchResult.object(at: 0))
+
+        manager.requestImage(for: fetchResult.object(at: Int.random(in: 0..<fetchResult.count)), targetSize: CGSize(width: 650, height: 650), contentMode: .default, options: requestOptions()) { imgData, err  in
+            guard let img = imgData else {
+                print(err!)
+                return
+            }
+            image = img
+        }
+
+        return image
+    }
+    
+    func fetchOption() -> PHFetchOptions {
+        let fetchOption = PHFetchOptions()
+        fetchOption.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        return fetchOption
+    }
+    
+    func requestOptions() -> PHImageRequestOptions {
+        let requestOptions = PHImageRequestOptions()
+        requestOptions.isSynchronous = true
+        requestOptions.deliveryMode = .highQualityFormat
+        return requestOptions
+    }
+    
+    func loadPlaceHolder() -> UIImage {
+        var image: UIImage!
+        
+        image = UIImage(named: "PlaceHolder/\(Int.random(in: 0...7))")
+        
+        return image
     }
     
     func session(_ session: ARSession, didFailWithError error: Error) {
