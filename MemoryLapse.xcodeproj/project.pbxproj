@@ -15,6 +15,12 @@
 		D6C0D7F329D07F8600477978 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6C0D7F129D07F8600477978 /* Main.storyboard */; };
 		D6C0D7F529D07F8700477978 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6C0D7F429D07F8700477978 /* Assets.xcassets */; };
 		D6C0D7F829D07F8700477978 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6C0D7F629D07F8700477978 /* LaunchScreen.storyboard */; };
+		D6C0D7FF29D0817500477978 /* StageScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C0D7FE29D0817500477978 /* StageScene.swift */; };
+		D6C0D80129D0817F00477978 /* GameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C0D80029D0817F00477978 /* GameData.swift */; };
+		D6C0D80329D0818D00477978 /* ARScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C0D80229D0818D00477978 /* ARScene.swift */; };
+		D6C0D80529D081AC00477978 /* ARViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C0D80429D081AC00477978 /* ARViewController.swift */; };
+		D6C0D80729D081BE00477978 /* StageScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6C0D80629D081BE00477978 /* StageScene.sks */; };
+		D6C0D80929D081DE00477978 /* ARScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6C0D80829D081DE00477978 /* ARScene.sks */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +33,12 @@
 		D6C0D7F229D07F8600477978 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D6C0D7F429D07F8700477978 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D6C0D7F729D07F8700477978 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		D6C0D7FE29D0817500477978 /* StageScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StageScene.swift; sourceTree = "<group>"; };
+		D6C0D80029D0817F00477978 /* GameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameData.swift; sourceTree = "<group>"; };
+		D6C0D80229D0818D00477978 /* ARScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARScene.swift; sourceTree = "<group>"; };
+		D6C0D80429D081AC00477978 /* ARViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewController.swift; sourceTree = "<group>"; };
+		D6C0D80629D081BE00477978 /* StageScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = StageScene.sks; sourceTree = "<group>"; };
+		D6C0D80829D081DE00477978 /* ARScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = ARScene.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,9 +73,15 @@
 			children = (
 				D6C0D7E729D07F8600477978 /* AppDelegate.swift */,
 				D6C0D7E929D07F8600477978 /* GameScene.sks */,
+				D6C0D80629D081BE00477978 /* StageScene.sks */,
+				D6C0D80829D081DE00477978 /* ARScene.sks */,
 				D6C0D7EB29D07F8600477978 /* Actions.sks */,
-				D6C0D7ED29D07F8600477978 /* GameScene.swift */,
+				D6C0D80029D0817F00477978 /* GameData.swift */,
 				D6C0D7EF29D07F8600477978 /* GameViewController.swift */,
+				D6C0D7ED29D07F8600477978 /* GameScene.swift */,
+				D6C0D7FE29D0817500477978 /* StageScene.swift */,
+				D6C0D80429D081AC00477978 /* ARViewController.swift */,
+				D6C0D80229D0818D00477978 /* ARScene.swift */,
 				D6C0D7F129D07F8600477978 /* Main.storyboard */,
 				D6C0D7F429D07F8700477978 /* Assets.xcassets */,
 				D6C0D7F629D07F8700477978 /* LaunchScreen.storyboard */,
@@ -132,6 +150,8 @@
 				D6C0D7F329D07F8600477978 /* Main.storyboard in Resources */,
 				D6C0D7EA29D07F8600477978 /* GameScene.sks in Resources */,
 				D6C0D7F529D07F8700477978 /* Assets.xcassets in Resources */,
+				D6C0D80929D081DE00477978 /* ARScene.sks in Resources */,
+				D6C0D80729D081BE00477978 /* StageScene.sks in Resources */,
 				D6C0D7F829D07F8700477978 /* LaunchScreen.storyboard in Resources */,
 				D6C0D7EC29D07F8600477978 /* Actions.sks in Resources */,
 			);
@@ -144,9 +164,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6C0D80529D081AC00477978 /* ARViewController.swift in Sources */,
 				D6C0D7EE29D07F8600477978 /* GameScene.swift in Sources */,
+				D6C0D80129D0817F00477978 /* GameData.swift in Sources */,
+				D6C0D7FF29D0817500477978 /* StageScene.swift in Sources */,
 				D6C0D7F029D07F8600477978 /* GameViewController.swift in Sources */,
 				D6C0D7E829D07F8600477978 /* AppDelegate.swift in Sources */,
+				D6C0D80329D0818D00477978 /* ARScene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

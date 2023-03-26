@@ -10,62 +10,163 @@ import GameplayKit
 
 class GameScene: SKScene {
     
-    private var label : SKLabelNode?
-    private var spinnyNode : SKShapeNode?
+    var gameViewController: GameViewController!
+    var gameMap: SKSpriteNode!
+    var pathNodes: [SKSpriteNode]! = []
+    var pathPositions: [CGPoint]! = [CGPoint(x: -19, y: -42), CGPoint(x: 55, y: -102), CGPoint(x: -13, y: -136), CGPoint(x: 64, y: -208), CGPoint(x: -18, y: -310)]
+    var player: SKSpriteNode!
+    var enterButton: SKSpriteNode!
+    var moveToRight: SKAction!
+    var moveToLeft: SKAction!
+    var rightIdle: SKAction!
+    var leftIdle: SKAction!
+    var rightMovementTextures: [SKTexture]! = []
+    var leftMovementTextures: [SKTexture]! = []
+    var idleRightTextures: [SKTexture]! = []
+    var idleLeftTextures: [SKTexture]! = []
+    var standardSize: CGFloat!
     
     override func didMove(to view: SKView) {
+//        print(self.view!.frame.size)
+//        print(GameData.currentPath)
+//        print(GameData.stageCleared)
+        standardSize = (self.frame.size.width + self.frame.size.height) * 0.05
         
-        // Get label node from scene and store it for use later
-        self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
-        if let label = self.label {
-            label.alpha = 0.0
-            label.run(SKAction.fadeIn(withDuration: 2.0))
+        gameMap = SKSpriteNode(imageNamed: "GameMap")
+        gameMap.size = self.view!.frame.size
+        gameMap.zPosition = 1
+        addChild(gameMap)
+        
+//        run(SKAction.playSoundFileNamed("Closers-GangnamBGM", waitForCompletion: false))
+        
+        for i in 1...5 {
+            pathNodes.append(SKSpriteNode(imageNamed: "Path/\(i)"))
+            pathNodes[i-1].alpha = 0.01
+            pathNodes[i-1].position = pathPositions[i-1]
+            pathNodes[i-1].zPosition = 3
+            pathNodes[i-1].name = "Path\(i)"
+            addChild(pathNodes[i-1])
         }
         
-        // Create shape node to use during mouse interaction
-        let w = (self.size.width + self.size.height) * 0.05
-        self.spinnyNode = SKShapeNode.init(rectOf: CGSize.init(width: w, height: w), cornerRadius: w * 0.3)
+        enterButton = SKSpriteNode(imageNamed: "ButtonUI/Enter")
+        enterButton.size = CGSize(width: standardSize * 1.5, height: standardSize * 1.5)
+        enterButton.zPosition = 2
+        enterButton.position = CGPoint(x: 100, y: -340)
+        enterButton.name = "enterButton"
+        addChild(enterButton)
         
-        if let spinnyNode = self.spinnyNode {
-            spinnyNode.lineWidth = 2.5
+        for i in 0...35 {
+            rightMovementTextures.append(SKTexture(imageNamed: "MoveRight/\(i)"))
+        }
+        moveToRight = SKAction.animate(with: rightMovementTextures, timePerFrame: 0.035)
+        
+        for i in 0...35 {
+            leftMovementTextures.append(SKTexture(imageNamed: "MoveLeft/\(i)"))
+        }
+        moveToLeft = SKAction.animate(with: leftMovementTextures, timePerFrame: 0.035)
+        
+        for i in 0...26 {
+            idleRightTextures.append(SKTexture(imageNamed: "IdleRight/\(i)"))
+        }
+        rightIdle = SKAction.animate(with: idleRightTextures, timePerFrame: 0.035)
+        
+        for i in 0...26 {
+            idleLeftTextures.append(SKTexture(imageNamed: "IdleLeft/\(i)"))
+        }
+        leftIdle = SKAction.animate(with: idleLeftTextures, timePerFrame: 0.035)
+        
+        player = SKSpriteNode(imageNamed: "IdleLeft/0")
+        player.size = CGSize(width: standardSize * GameData.playerRatio, height: standardSize * GameData.playerRatio)
+        player.position = GameData.playerPosition
+        player.zPosition = 2
+        checkIdlePosition(GameData.currentPath)
+        addChild(player)
+        
+        let tapDetection = UITapGestureRecognizer()
+        tapDetection.addTarget(self, action: #selector(tappedView(_:)))
+        tapDetection.numberOfTapsRequired = 1
+        tapDetection.numberOfTouchesRequired = 1
+        self.view!.addGestureRecognizer(tapDetection)
+    }
+    
+    @objc func tappedView (_ sender: UITapGestureRecognizer){
+        if sender.state == .ended {
+            var post = sender.location(in: sender.view)
+            post = self.convertPoint(fromView: post)
+            let touchNode = self.atPoint(post)
             
-            spinnyNode.run(SKAction.repeatForever(SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 1)))
-            spinnyNode.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
-                                              SKAction.fadeOut(withDuration: 0.5),
-                                              SKAction.removeFromParent()]))
+            if let name = touchNode.name {
+                if name == "Path1" && GameData.currentPath == "Path2" && GameData.stageCleared >= 4 {
+                    playerMovement("Path1", CGPoint(x: -19, y: -15), 1.2, moveToLeft)
+                }
+                else if name == "Path2" && (GameData.currentPath == "Path3" || GameData.currentPath == "Path1") && GameData.stageCleared >= 3 {
+                    playerMovement("Path2", CGPoint(x: 55, y: -70), 1.5, moveToRight)
+                }
+                else if name == "Path3" && (GameData.currentPath == "Path4" || GameData.currentPath == "Path2") && GameData.stageCleared >= 2 {
+                    playerMovement("Path3", CGPoint(x: -13, y: -98), 1.7, moveToLeft)
+                }
+                else if name == "Path4" && (GameData.currentPath == "Path5" || GameData.currentPath == "Path3") && GameData.stageCleared >= 1 {
+                    playerMovement("Path4", CGPoint(x: 64, y: -160), 2.1, moveToRight)
+                }
+                else if name == "Path5" && GameData.currentPath == "Path4" {
+                    playerMovement("Path5", CGPoint(x: -18, y: -250), 2.5, moveToLeft)
+                }
+                else if name == "enterButton"{
+                    toStageScene()
+                }
+            }
         }
     }
     
+    func playerMovement(_ currentPath: String, _ newPlayerPosition: CGPoint, _ newPlayerRatio: CGFloat, _ playerMovement: SKAction) -> Void {
+        
+        let newPlayerWHSize = standardSize * newPlayerRatio
+        changeGameData(currentPath, newPlayerPosition, newPlayerRatio)
+        
+        player.run(SKAction.repeatForever(playerMovement))
+        player.run(SKAction.scale(to: CGSize(width: newPlayerWHSize, height: newPlayerWHSize), duration: 1.5))
+        player.run(SKAction.move(to: newPlayerPosition, duration: 1.5), completion: {
+            self.player.removeAllActions()
+            self.checkIdlePosition(currentPath)
+        })
+    }
+    
+    func toStageScene() -> Void {
+        
+        let scene = StageScene(fileNamed: "StageScene")
+        scene!.scaleMode = .resizeFill
+        scene!.gameViewController = gameViewController
+        self.view!.presentScene(scene!, transition: SKTransition.fade(with: UIColor.white, duration: 1))
+    }
+    
+    func checkIdlePosition(_ currentPath: String) -> Void {
+        
+        switch GameData.currentPath {
+        case "Path5", "Path3", "Path1":
+            player.run(SKAction.repeatForever(leftIdle))
+        default:
+            player.run(SKAction.repeatForever(rightIdle))
+        }
+    }
+    
+    func changeGameData(_ currentPath: String, _ newPlayerPosition: CGPoint, _ newPlayerRatio: CGFloat) -> Void {
+        
+        GameData.playerRatio = newPlayerRatio
+        GameData.currentPath = currentPath
+        GameData.playerPosition = newPlayerPosition
+    }
     
     func touchDown(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.green
-            self.addChild(n)
-        }
+        print(pos)
     }
     
     func touchMoved(toPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.blue
-            self.addChild(n)
-        }
     }
     
     func touchUp(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.red
-            self.addChild(n)
-        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let label = self.label {
-            label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
-        }
-        
         for t in touches { self.touchDown(atPoint: t.location(in: self)) }
     }
     
@@ -86,3 +187,4 @@ class GameScene: SKScene {
         // Called before each frame is rendered
     }
 }
+
