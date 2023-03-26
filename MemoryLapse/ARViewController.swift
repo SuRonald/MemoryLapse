@@ -77,8 +77,8 @@ class ARViewController: UIViewController, ARSKViewDelegate {
             node.size.height = CGFloat(image.size.height * 0.2)
             node.size.width = CGFloat(image.size.width * 0.2)
         case "Placeholder":
-            node.size.height = CGFloat(image.size.height * 0.052)
-            node.size.width = CGFloat(image.size.width * 0.052)
+            node.size.height = CGFloat(image.size.height * 0.05)
+            node.size.width = CGFloat(image.size.width * 0.05)
         default:
             node.size.height = CGFloat(image.size.height * 0.2)
             node.size.width = CGFloat(image.size.width * 0.2)

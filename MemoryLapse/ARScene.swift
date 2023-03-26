@@ -61,7 +61,7 @@ class ARScene: SKScene {
         
         tapCount += 1
         
-        if GameData.stageCleared < GameData.currentPath && tapCount == 6 {
+        if GameData.stageCleared < GameData.currentPath && tapCount == 2 {
             GameData.stageCleared = GameData.currentPath
         }
         

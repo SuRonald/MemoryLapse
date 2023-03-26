@@ -8,10 +8,13 @@
 import UIKit
 import SpriteKit
 import GameplayKit
+import Photos
 
 class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        checkPermission()
         
         if !GameData.bgmIsPlaying {
             GameData.backgroundMusicPlayer.play()
@@ -45,5 +48,13 @@ class GameViewController: UIViewController {
 
     override var prefersStatusBarHidden: Bool {
         return true
+    }
+    
+    func checkPermission() -> Void {
+        if PHPhotoLibrary.authorizationStatus(for: .readWrite) != PHAuthorizationStatus.authorized {
+            PHPhotoLibrary.requestAuthorization(for: .readWrite, handler: {_ in
+                print("Access Granted")
+            })
+        }
     }
 }
