@@ -13,6 +13,7 @@ import Photos
 class ARViewController: UIViewController, ARSKViewDelegate {
     
     let manager = PHImageManager.default()
+    var loadType: String = ""
 
     @IBOutlet weak var sceneView: ARSKView!
     
@@ -61,16 +62,27 @@ class ARViewController: UIViewController, ARSKViewDelegate {
         
         if GameData.currentPath <= GameData.momentCount {
             image = loadImage(GameData.places[GameData.currentPath-1])
+            loadType = "Image"
         }
         else {
             image = loadPlaceHolder()
+            loadType = "Placeholder"
         }
         
         let texture = SKTexture(image: image)
         
         let node = SKSpriteNode(texture: texture)
-        node.size.height = CGFloat(image.size.height * 0.2)
-        node.size.width = CGFloat(image.size.width * 0.2)
+        switch loadType {
+        case "Image":
+            node.size.height = CGFloat(image.size.height * 0.2)
+            node.size.width = CGFloat(image.size.width * 0.2)
+        case "Placeholder":
+            node.size.height = CGFloat(image.size.height * 0.052)
+            node.size.width = CGFloat(image.size.width * 0.052)
+        default:
+            node.size.height = CGFloat(image.size.height * 0.2)
+            node.size.width = CGFloat(image.size.width * 0.2)
+        }
         
         return node;
     }
@@ -111,7 +123,7 @@ class ARViewController: UIViewController, ARSKViewDelegate {
     func loadPlaceHolder() -> UIImage {
         var image: UIImage!
         
-        image = UIImage(named: "PlaceHolder/\(Int.random(in: 0...7))")
+        image = UIImage(named: "Placeholder/\(Int.random(in: 0...66))")
         
         return image
     }

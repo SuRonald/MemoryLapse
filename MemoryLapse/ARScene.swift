@@ -13,6 +13,7 @@ class ARScene: SKScene {
     var arViewController: ARViewController!
     var backButtonNode: SKSpriteNode!
     var standardSize: CGFloat!
+    var tapCount: Int = 0
     
     override func didMove(to view: SKView) {
         standardSize = (self.frame.size.width + self.frame.size.height) * 0.05
@@ -40,7 +41,7 @@ class ARScene: SKScene {
             if let name = touchNode.name {
                 if name == "BackButton" {
                     GameData.backgroundMusicPlayer.play()
-                    GameData.stageCleared += 1
+//                    GameData.stageCleared += 1
                     arViewController.dismiss(animated: true)
                 }
             }
@@ -58,12 +59,18 @@ class ARScene: SKScene {
         
         print("TouchsBegan")
         
+        tapCount += 1
+        
+        if GameData.stageCleared < GameData.currentPath && tapCount == 6 {
+            GameData.stageCleared = GameData.currentPath
+        }
+        
         // Create anchor using the camera's current position
         if let currentFrame = sceneView.session.currentFrame {
             
             // Create a transform with a translation of 0.2 meters in front of the camera
             var translation = matrix_identity_float4x4
-            translation.columns.3.z = -0.5
+            translation.columns.3.z = -0.6
             let transform = simd_mul(currentFrame.camera.transform, translation)
             
             // Add a new anchor to the session
