@@ -77,8 +77,8 @@ class ARViewController: UIViewController, ARSKViewDelegate {
             node.size.height = CGFloat(image.size.height * 0.2)
             node.size.width = CGFloat(image.size.width * 0.2)
         case "Placeholder":
-            node.size.height = CGFloat(image.size.height * 0.05)
-            node.size.width = CGFloat(image.size.width * 0.05)
+            node.size.height = CGFloat(image.size.height * 0.032)
+            node.size.width = CGFloat(image.size.width * 0.032)
         default:
             node.size.height = CGFloat(image.size.height * 0.2)
             node.size.width = CGFloat(image.size.width * 0.2)
@@ -88,7 +88,7 @@ class ARViewController: UIViewController, ARSKViewDelegate {
     }
     
     func loadImage(_ index: String) -> UIImage {
-        var image: UIImage!
+        var image: UIImage?
         let fetchResult: PHFetchResult = PHAsset.fetchAssets(in: GameData.momentList[index]![Int.random(in: 0..<GameData.momentList[index]!.count)], options: fetchOption())
 
         print("Masuk")
@@ -104,7 +104,7 @@ class ARViewController: UIViewController, ARSKViewDelegate {
             image = img
         }
 
-        return image
+        return image ?? UIImage()
     }
     
     func fetchOption() -> PHFetchOptions {

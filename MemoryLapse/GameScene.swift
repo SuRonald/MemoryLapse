@@ -21,15 +21,19 @@ class GameScene: SKScene {
     var moveToLeft: SKAction!
     var rightIdle: SKAction!
     var leftIdle: SKAction!
+    var frontIdle: SKAction!
     var rightMovementTextures: [SKTexture]! = []
     var leftMovementTextures: [SKTexture]! = []
     var idleRightTextures: [SKTexture]! = []
     var idleLeftTextures: [SKTexture]! = []
+    var idleFrontTextures: [SKTexture]! = []
     var standardSize: CGFloat!
     
     var endingCount: Int! = 0
     var endingScreens: [SKSpriteNode]! = []
     var endingTextNodes: [SKSpriteNode]! = []
+    var endPlayerNode: SKSpriteNode!
+    var patient: Bool = false
     
     override func didMove(to view: SKView) {
 //        print(self.view!.frame.size)
@@ -77,7 +81,7 @@ class GameScene: SKScene {
             endingTextNodes.append(SKSpriteNode())
             endingTextNodes[i] = SKSpriteNode(imageNamed: "EndingText/\(i)")
             endingTextNodes[i].size = self.view!.frame.size
-            endingTextNodes[i].zPosition = 7
+            endingTextNodes[i].zPosition = 8
             endingTextNodes[i].alpha = 0
             endingTextNodes[i].name = "Ending"
             endingTextNodes[i].run(SKAction.fadeIn(withDuration: 1))
@@ -110,12 +114,25 @@ class GameScene: SKScene {
         }
         leftIdle = SKAction.animate(with: idleLeftTextures, timePerFrame: 0.02)
         
+        for i in 0...26 {
+            idleFrontTextures.append(SKTexture(imageNamed: "IdleFront/\(i)"))
+        }
+        frontIdle = SKAction.animate(with: idleFrontTextures, timePerFrame: 0.02)
+        
         player = SKSpriteNode(imageNamed: "IdleLeft/0")
         player.size = CGSize(width: standardSize * GameData.playerRatio, height: standardSize * GameData.playerRatio)
         player.position = GameData.playerPosition
         player.zPosition = 3
         checkIdlePosition(GameData.currentPath)
         addChild(player)
+        
+        endPlayerNode = SKSpriteNode(imageNamed: "IdleFront/0")
+        endPlayerNode.size = CGSize(width: standardSize * 4, height: standardSize * 4)
+        endPlayerNode.position = CGPoint(x: 0, y: -200)
+        endPlayerNode.zPosition = 7
+        endPlayerNode.alpha = 0
+        endPlayerNode.run(SKAction.fadeIn(withDuration: 1))
+        endPlayerNode.run(SKAction.repeatForever(frontIdle))
         
         let tapDetection = UITapGestureRecognizer()
         tapDetection.addTarget(self, action: #selector(tappedView(_:)))
@@ -131,11 +148,13 @@ class GameScene: SKScene {
             let touchNode = self.atPoint(post)
             
             if let name = touchNode.name {
-                if name == "Ending" {
+                if name == "Ending" && !patient {
+                    patient = true
                     switch endingCount! {
                     case 0...5:
                         if endingCount == 5 {
                             addChild(endingScreens[1])
+                            endPlayerNode.run(SKAction.sequence([SKAction.fadeOut(withDuration: 1), SKAction.removeFromParent()]))
                             run(SKAction.wait(forDuration: 1), completion: {
                                 self.endingScreens[0].run(SKAction.removeFromParent())
                             })
@@ -144,6 +163,7 @@ class GameScene: SKScene {
                         endingCount += 1
                         run(SKAction.wait(forDuration: 1), completion: {
                             self.addChild(self.endingTextNodes[self.endingCount])
+                            self.patient = false
                         })
                     default:
                         resetGameData()
@@ -156,6 +176,7 @@ class GameScene: SKScene {
 //                else if name == "Path6" {
                     playerMovement(6, CGPoint(x: 90, y: 97), 1.2, moveToRight)
                     addChild(endingScreens[0])
+                    addChild(endPlayerNode)
                     run(SKAction.wait(forDuration: 1), completion: {
                         self.addChild(self.endingTextNodes[0])
                     })
