@@ -1,6 +1,6 @@
 # MemoryLapse
 A game that let you nostalgic with your own important memories or moment. Each stage will display different set of images depending on your own photo gallery using Augmented Reality.
-https://github.com/SuRonald/MemoryLapse/blob/main/Documentation/MemoryLapseBumper.mp4
+![](Documentation/Documentation/MemoryLapseBumper.mp4)
 
 # Blocker & Solver
 
