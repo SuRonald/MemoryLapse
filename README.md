@@ -2,6 +2,11 @@
 A game that let you nostalgic with your own important memories or moment. Each stage will display different set of images depending on your own photo gallery using Augmented Reality.
 ![](Documentation/MemoryLapseBumper.gif)
 
+# Created By:
+- Ronald Sumichael Sunan
+- Michael Christopher
+- Glenn Reinard Stanis
+
 # Blocker & Solver
 
 ## SpriteNode keep blinking
