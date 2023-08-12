@@ -123,7 +123,7 @@ class ARViewController: UIViewController, ARSKViewDelegate {
     func loadPlaceHolder() -> UIImage {
         var image: UIImage!
         
-        image = UIImage(named: "Placeholder/\(Int.random(in: 0...66))")
+        image = UIImage(named: "Placeholder/\(Int.random(in: 0...10))")
         
         return image
     }
